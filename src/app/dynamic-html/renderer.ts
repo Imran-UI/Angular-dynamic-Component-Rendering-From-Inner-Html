@@ -39,8 +39,11 @@ export class DynamicHTMLRenderer {
     this.options.components.forEach(({ selector }) => {
       const elements = (elementRef.nativeElement as Element).querySelectorAll(selector);
       Array.prototype.forEach.call(elements, (el: Element) => {
+        const data = el.getAttribute('offerName');
         const content = el.innerHTML;
-        const cmpRef = this.componentFactories.get(selector).create(this.injector, [], el);
+        let cmpRef = this.componentFactories.get(selector).create(this.injector, [], el);
+        cmpRef.instance.data = data;
+        cmpRef.changeDetectorRef.detectChanges();
 
         el.removeAttribute('ng-version');
 
